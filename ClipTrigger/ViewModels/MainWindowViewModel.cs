@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Media;
 using System.Windows;
+using ClipTrigger.Models;
 using Prism.Mvvm;
 
 namespace ClipTrigger.ViewModels;
@@ -22,7 +23,7 @@ public class MainWindowViewModel : BindableBase
         set => SetProperty(ref title, value);
     }
 
-    public ObservableCollection<DirectoryInfo> SourceDirectories { get; set; } = new ();
+    public ObservableCollection<SearchFolderItem> SourceDirectories { get; set; } = new ();
 
     public void OnClipboardChanged(string text)
     {
@@ -51,7 +52,7 @@ public class MainWindowViewModel : BindableBase
         {
             foreach (var dir in SourceDirectories)
             {
-                var fullPath = Path.Combine(dir.FullName, fileName);
+                var fullPath = Path.Combine(dir.FullPath, fileName);
                 if (File.Exists(fullPath))
                 {
                     return fullPath;
@@ -67,7 +68,7 @@ public class MainWindowViewModel : BindableBase
             {
                 foreach (var ext in supportedExtensions)
                 {
-                    var fullPath = Path.Combine(dir.FullName, fileName + ext);
+                    var fullPath = Path.Combine(dir.FullPath, fileName + ext);
                     if (File.Exists(fullPath))
                     {
                         return fullPath;
@@ -102,11 +103,11 @@ public class MainWindowViewModel : BindableBase
 
     private void InjectDummies()
     {
-        SourceDirectories.Add(new DirectoryInfo(@"C:\Users\testUser\Desktop\test"));
-        SourceDirectories.Add(new DirectoryInfo(@"C:\Users\testUser\Desktop\test1"));
-        SourceDirectories.Add(new DirectoryInfo(@"C:\Users\testUser\Desktop\test2"));
-        SourceDirectories.Add(new DirectoryInfo(@"C:\Users\testUser\Desktop\test3"));
-        SourceDirectories.Add(new DirectoryInfo(@"C:\Users\testUser\Desktop\test4"));
-        SourceDirectories.Add(new DirectoryInfo(@"C:\Users\testUser\Desktop\test5"));
+        SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test"));
+        SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test1"));
+        SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test2"));
+        SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test3"));
+        SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test4"));
+        SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test5"));
     }
 }

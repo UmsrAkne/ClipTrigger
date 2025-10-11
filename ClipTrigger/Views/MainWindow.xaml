@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClipTrigger.Models"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:ClipTrigger.ViewModels"
     Title="{Binding Title}"
@@ -69,8 +70,11 @@
 
                 <!--  表示だけ必要な最小の DataTemplate（SourceDirectories が string の場合）  -->
                 <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" />
+                    <DataTemplate DataType="{x:Type models:SearchFolderItem}">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Margin="3,0" IsChecked="{Binding IncludeInSearch}" />
+                            <TextBlock Margin="3,0" Text="{Binding FullPath}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
