@@ -37,6 +37,15 @@
                 Grid.Row="1"
                 AlternationCount="2"
                 ItemsSource="{Binding SourceDirectories}">
+
+                <!--  追加: キー操作の割り当て  -->
+                <ListBox.InputBindings>
+                    <KeyBinding
+                        Key="Space"
+                        Command="{Binding ToggleIncludeInSearchCommand}"
+                        CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListBox}}" />
+                </ListBox.InputBindings>
+
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="Padding" Value="1" />
@@ -68,9 +77,8 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
 
-                <!--  表示だけ必要な最小の DataTemplate（SourceDirectories が string の場合）  -->
                 <ListBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type models:SearchFolderItem}">
+                    <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <CheckBox Margin="3,0" IsChecked="{Binding IncludeInSearch}" />
                             <TextBlock Margin="3,0" Text="{Binding FullPath}" />

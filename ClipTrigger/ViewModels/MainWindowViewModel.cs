@@ -4,6 +4,7 @@ using System.IO;
 using System.Media;
 using System.Windows;
 using ClipTrigger.Models;
+using Prism.Commands;
 using Prism.Mvvm;
 
 namespace ClipTrigger.ViewModels;
@@ -24,6 +25,16 @@ public class MainWindowViewModel : BindableBase
     }
 
     public ObservableCollection<SearchFolderItem> SourceDirectories { get; set; } = new ();
+
+    public DelegateCommand<SearchFolderItem> ToggleIncludeInSearchCommand => new (item =>
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        item.IncludeInSearch = !item.IncludeInSearch;
+    });
 
     public void OnClipboardChanged(string text)
     {
