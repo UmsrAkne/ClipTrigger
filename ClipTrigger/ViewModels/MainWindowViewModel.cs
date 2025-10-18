@@ -1,28 +1,27 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Media;
 using System.Windows;
 using ClipTrigger.Models;
+using ClipTrigger.Utils;
 using Prism.Commands;
 using Prism.Mvvm;
 
 namespace ClipTrigger.ViewModels;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class MainWindowViewModel : BindableBase
 {
-    private string title = "Prism Application";
+    private readonly AppVersionInfo appVersionInfo = new ();
 
     public MainWindowViewModel()
     {
         InjectDummies();
     }
 
-    public string Title
-    {
-        get => title;
-        set => SetProperty(ref title, value);
-    }
+    public string Title => appVersionInfo.Title;
 
     public ObservableCollection<SearchFolderItem> SourceDirectories { get; set; } = new ();
 
@@ -112,6 +111,7 @@ public class MainWindowViewModel : BindableBase
         }
     }
 
+    [Conditional("DEBUG")]
     private void InjectDummies()
     {
         SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test"));
