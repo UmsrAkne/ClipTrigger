@@ -80,16 +80,31 @@
 
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Margin="3,0" IsChecked="{Binding IncludeInSearch}" />
-                        <TextBlock Margin="3,0" Text="{Binding FullPath}" />
+                    <Grid Margin="0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <CheckBox
+                            Grid.Column="0"
+                            Margin="3,0"
+                            IsChecked="{Binding IncludeInSearch}" />
+
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="3,0"
+                            Text="{Binding FullPath}" />
+
                         <Button
-                            Margin="8,0,0,0"
+                            Grid.Column="2"
+                            Margin="5,0"
                             Padding="8,1"
                             Command="{Binding DataContext.RemoveSourceDirectoryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                             CommandParameter="{Binding}"
                             Content="削除" />
-                    </StackPanel>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
