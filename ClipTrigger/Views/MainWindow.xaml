@@ -83,6 +83,12 @@
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Margin="3,0" IsChecked="{Binding IncludeInSearch}" />
                         <TextBlock Margin="3,0" Text="{Binding FullPath}" />
+                        <Button
+                            Margin="8,0,0,0"
+                            Padding="8,1"
+                            Command="{Binding DataContext.RemoveSourceDirectoryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                            CommandParameter="{Binding}"
+                            Content="削除" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

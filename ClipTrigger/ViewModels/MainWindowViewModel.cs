@@ -36,6 +36,16 @@ public class MainWindowViewModel : BindableBase
         item.IncludeInSearch = !item.IncludeInSearch;
     });
 
+    public DelegateCommand<SearchFolderItem> RemoveSourceDirectoryCommand => new (item =>
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        SourceDirectories.Remove(item);
+    });
+
     public DelegateCommand AddSourceDirectoryCommand => new (() =>
     {
         if (string.IsNullOrWhiteSpace(InputText))
