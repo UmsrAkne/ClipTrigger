@@ -15,6 +15,7 @@ namespace ClipTrigger.ViewModels;
 public class MainWindowViewModel : BindableBase
 {
     private readonly AppVersionInfo appVersionInfo = new ();
+    private string inputText;
 
     public MainWindowViewModel()
     {
@@ -34,6 +35,19 @@ public class MainWindowViewModel : BindableBase
 
         item.IncludeInSearch = !item.IncludeInSearch;
     });
+
+    public DelegateCommand AddSourceDirectoryCommand => new (() =>
+    {
+        if (string.IsNullOrWhiteSpace(InputText))
+        {
+            return;
+        }
+
+        SourceDirectories.Add(new SearchFolderItem(InputText));
+        InputText = string.Empty;
+    });
+
+    public string InputText { get => inputText; set => SetProperty(ref inputText, value); }
 
     public void OnClipboardChanged(string text)
     {

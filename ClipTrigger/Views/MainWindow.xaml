@@ -25,11 +25,13 @@
                 <TextBox
                     Margin="0,5"
                     Padding="1"
-                    Text="DirectoryPath" />
+                    Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}" />
+
                 <Button
                     Margin="0,0,0,5"
                     Padding="20,2"
                     HorizontalAlignment="Right"
+                    Command="{Binding AddSourceDirectoryCommand}"
                     Content="Add" />
             </StackPanel>
 
