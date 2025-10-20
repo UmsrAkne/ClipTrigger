@@ -144,5 +144,10 @@ public class MainWindowViewModel : BindableBase
         SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test3"));
         SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test4"));
         SourceDirectories.Add(new (@"C:\Users\testUser\Desktop\test5"));
+
+        var desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        var sampleDirectoryPath =
+            Path.Combine(desktop, "myFiles", "Tests", "RiderProjects", "ClipTrigger", "samples");
+        SourceDirectories.Add(new (sampleDirectoryPath));
     }
 }
