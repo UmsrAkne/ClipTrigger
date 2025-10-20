@@ -5,6 +5,7 @@ using System.IO;
 using System.Media;
 using System.Windows;
 using ClipTrigger.Models;
+using ClipTrigger.Services.Audio;
 using ClipTrigger.Utils;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -15,6 +16,7 @@ namespace ClipTrigger.ViewModels;
 public class MainWindowViewModel : BindableBase
 {
     private readonly AppVersionInfo appVersionInfo = new ();
+    private readonly IPlayer oggPlayer = new OggPlayer();
     private string inputText;
 
     public MainWindowViewModel()
@@ -123,10 +125,16 @@ public class MainWindowViewModel : BindableBase
                 var player = new SoundPlayer(filePath);
                 player.Play();
             }
+            else if (filePath.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
+            {
+                // Use IPlayer (OggPlayer) for ogg playback
+                oggPlayer.SetVolume(1.0f); // default full volume
+                oggPlayer.Play(filePath);
+            }
             else
             {
                 // NAudio などを使えば mp3 も対応できる
-                MessageBox.Show("MP3 再生は別ライブラリが必要です");
+                MessageBox.Show("この拡張子の再生は未対応です (mp3等)。");
             }
         }
         catch (Exception ex)
