@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:ClipTrigger.Models"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:ClipTrigger.ViewModels"
     Title="{Binding Title}"
@@ -15,6 +16,8 @@
 
     <Grid Margin="5">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -93,6 +96,62 @@
                             Command="{Binding DataContext.RemoveSourceDirectoryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                             CommandParameter="{Binding}"
                             Content="削除" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <StackPanel
+            Grid.Row="2"
+            Margin="0,8,0,4"
+            Orientation="Horizontal">
+            <Border>
+                <TextBlock Text="playback history:" />
+            </Border>
+        </StackPanel>
+
+        <ListBox
+            Grid.Row="3"
+            AlternationCount="2"
+            ItemsSource="{Binding PlayHistory}">
+
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Padding" Value="1" />
+                    <Setter Property="Margin" Value="1" />
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                    <Setter Property="Template" Value="{StaticResource ListBoxItemSimpleTemplate}" />
+                    <Style.Triggers>
+                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                            <Setter Property="Background" Value="AntiqueWhite" />
+                        </Trigger>
+
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="LightSalmon" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:PlaybackHistoryItem}">
+                    <Grid Margin="0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="180" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Margin="3,0"
+                            Text="{Binding FileName}" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Margin="3,0"
+                            Text="{Binding FullPath}" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
