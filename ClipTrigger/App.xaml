@@ -44,5 +44,15 @@
         </Style>
         <!-- Apply the rounded style to all Buttons by default -->
         <Style BasedOn="{StaticResource RoundedButtonStyle}" TargetType="Button" />
+
+        <!-- Reusable ControlTemplate for ListBoxItem containers -->
+        <ControlTemplate x:Key="ListBoxItemSimpleTemplate" TargetType="ListBoxItem">
+            <Border
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+                <ContentPresenter Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" />
+            </Border>
+        </ControlTemplate>
     </Application.Resources>
 </prism:PrismApplication>

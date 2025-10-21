@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Media;
 using System.Windows;
 using ClipTrigger.Models;
@@ -27,6 +28,8 @@ public class MainWindowViewModel : BindableBase
     public string Title => appVersionInfo.Title;
 
     public ObservableCollection<SearchFolderItem> SourceDirectories { get; set; } = new ();
+
+    public ObservableCollection<PlaybackHistoryItem> PlayHistory { get; } = new ();
 
     public DelegateCommand<SearchFolderItem> ToggleIncludeInSearchCommand => new (item =>
     {
@@ -124,12 +127,14 @@ public class MainWindowViewModel : BindableBase
             {
                 var player = new SoundPlayer(filePath);
                 player.Play();
+                RecordHistory(filePath);
             }
             else if (filePath.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
             {
                 // Use IPlayer (OggPlayer) for ogg playback
                 oggPlayer.SetVolume(1.0f); // default full volume
                 oggPlayer.Play(filePath);
+                RecordHistory(filePath);
             }
             else
             {
@@ -140,6 +145,35 @@ public class MainWindowViewModel : BindableBase
         catch (Exception ex)
         {
             MessageBox.Show("再生失敗: " + ex.Message);
+        }
+    }
+
+    private void RecordHistory(string filePath)
+    {
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            return;
+        }
+
+        var now = DateTime.Now;
+        var fileName = Path.GetFileName(filePath);
+
+        var existing = PlayHistory.FirstOrDefault(h => string.Equals(h.FullPath, filePath, StringComparison.OrdinalIgnoreCase));
+        if (existing == null)
+        {
+            PlayHistory.Add(new PlaybackHistoryItem
+            {
+                FullPath = filePath,
+                FileName = fileName,
+                LastPlayedAt = now,
+                PlayCount = 1,
+            });
+        }
+        else
+        {
+            existing.FileName = fileName; // ファイル名が変わることはほぼないが、念のため更新
+            existing.LastPlayedAt = now;
+            existing.PlayCount += 1;
         }
     }
 
@@ -157,5 +191,9 @@ public class MainWindowViewModel : BindableBase
         var sampleDirectoryPath =
             Path.Combine(desktop, "myFiles", "Tests", "RiderProjects", "ClipTrigger", "samples");
         SourceDirectories.Add(new (sampleDirectoryPath));
+
+        PlayHistory.Add(new PlaybackHistoryItem(@"C:\Users\test\1.mp3"));
+        PlayHistory.Add(new PlaybackHistoryItem(@"C:\Users\test\2.mp3"));
+        PlayHistory.Add(new PlaybackHistoryItem(@"C:\Users\test\3.mp3"));
     }
 }
