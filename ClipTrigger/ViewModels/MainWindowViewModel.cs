@@ -31,6 +31,16 @@ public class MainWindowViewModel : BindableBase
 
     public ObservableCollection<PlaybackHistoryItem> PlayHistory { get; } = new ();
 
+    public DelegateCommand<PlaybackHistoryItem> PlayFromHistoryCommand => new(item =>
+    {
+        if (item == null || string.IsNullOrWhiteSpace(item.FullPath))
+        {
+            return;
+        }
+
+        PlaySound(item.FullPath);
+    });
+
     public DelegateCommand<SearchFolderItem> ToggleIncludeInSearchCommand => new (item =>
     {
         if (item == null)
