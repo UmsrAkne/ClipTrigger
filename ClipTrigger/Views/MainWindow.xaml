@@ -9,8 +9,8 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewModels="clr-namespace:ClipTrigger.ViewModels"
     Title="{Binding Title}"
-    Width="525"
-    Height="350"
+    Width="600"
+    Height="480"
     d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
