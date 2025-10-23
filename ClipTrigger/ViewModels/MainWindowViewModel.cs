@@ -14,11 +14,12 @@ using Prism.Mvvm;
 namespace ClipTrigger.ViewModels;
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public class MainWindowViewModel : BindableBase
+public class MainWindowViewModel : BindableBase, IDisposable
 {
     private readonly AppVersionInfo appVersionInfo = new ();
     private readonly IPlayer oggPlayer = new OggPlayer();
     private string inputText;
+    private SoundPlayer player;
 
     public MainWindowViewModel()
     {
@@ -30,6 +31,16 @@ public class MainWindowViewModel : BindableBase
     public ObservableCollection<SearchFolderItem> SourceDirectories { get; set; } = new ();
 
     public ObservableCollection<PlaybackHistoryItem> PlayHistory { get; } = new ();
+
+    public DelegateCommand<PlaybackHistoryItem> PlayFromHistoryCommand => new(item =>
+    {
+        if (item == null || string.IsNullOrWhiteSpace(item.FullPath))
+        {
+            return;
+        }
+
+        PlaySound(item.FullPath);
+    });
 
     public DelegateCommand<SearchFolderItem> ToggleIncludeInSearchCommand => new (item =>
     {
@@ -76,6 +87,17 @@ public class MainWindowViewModel : BindableBase
         {
             PlaySound(path);
         }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        player?.Dispose();
     }
 
     private bool IsFileName(string text)
@@ -125,12 +147,15 @@ public class MainWindowViewModel : BindableBase
         {
             if (filePath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
             {
-                var player = new SoundPlayer(filePath);
+                StopAllSounds();
+                player = new SoundPlayer(filePath);
                 player.Play();
                 RecordHistory(filePath);
             }
             else if (filePath.EndsWith(".ogg", StringComparison.OrdinalIgnoreCase))
             {
+                StopAllSounds();
+
                 // Use IPlayer (OggPlayer) for ogg playback
                 oggPlayer.SetVolume(1.0f); // default full volume
                 oggPlayer.Play(filePath);
@@ -146,6 +171,12 @@ public class MainWindowViewModel : BindableBase
         {
             MessageBox.Show("再生失敗: " + ex.Message);
         }
+    }
+
+    private void StopAllSounds()
+    {
+        player?.Stop();
+        oggPlayer.Stop();
     }
 
     private void RecordHistory(string filePath)
